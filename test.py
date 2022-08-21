@@ -1,5 +1,5 @@
 import os
-import save
+import users
 import subprocess
 import pickup
 os.system("cls")
@@ -43,7 +43,7 @@ if newaccount(False) == True:
     # Put in temporary file and signal database to pick it up
     file1 = open("pickup.py","w")
     str1 = repr(userdata)
-    file1.write(str1)
+    file1.write("new_user_data = " + str1)
     file1.close()
     p = subprocess.Popen('save.py', shell=True)
     out,err = p.communicate()
@@ -53,7 +53,7 @@ if newaccount(False) == True:
 userdata = username + password
 
 # Check the database for login info and login if sucessful.
-if userdata in save.users and username != "new":
+if userdata in users.userstable and username != "new":
     print("Logged in as: " + username)
-elif userdata not in save.users and username != "new":
+elif userdata not in users.userstable and username != "new":
     print("Login failed. Aborting...")
