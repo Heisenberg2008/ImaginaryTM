@@ -1,1 +1,1 @@
-new_user_data = 'ericwabc2'
+new_user_data = 'new'
