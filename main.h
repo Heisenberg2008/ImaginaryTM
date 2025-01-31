@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-void makeNewAccountUsername();
-void makeNewAccountPassword();
+char *makeNewAccountUsername();
+char *makeNewAccountPassword();
 
 #endif

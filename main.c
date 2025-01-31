@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
@@ -23,18 +24,10 @@ int main() {
         if((int)confirm == (int)'n') {printf("Sign up aborted. \n"); return 2;}
         if((int)confirm != (int)'y') {printf("Invalid Input. \n"); return 3;}
         else {
-            char new_username[MAX_CHAR]; // These are the strings to add to DB later
-            char new_password[MAX_CHAR];
-
-            puts("Creating new account...");
-            while (getchar() != '\n');
-            makeNewAccountUsername(new_username);
-            makeNewAccountPassword(new_password);
-
-            puts("\nBEGIN DEBUG");
-            printf("The recognized username is: %s \n", new_username);
-            printf("The recognized password is: %s \n", new_password);
-            puts("END DEBUG \n");
+            puts("Creating new account... WIP");
+            
+            char *new_username = makeNewAccountUsername();
+            printf("DEBUG: new_username is %s\n",new_username);
 
             return 0;
         }
@@ -45,8 +38,16 @@ int main() {
     }
 }
 
-void makeNewAccountUsername(char *new_username) {
+char *makeNewAccountUsername() {
     char confirm[2];
+    char *new_username = malloc(MAX_CHAR * sizeof(char));
+
+    if (new_username == NULL) {
+        printf("FATAL: Memory Allocation failed in makeNewAccountUsername() !!");
+        return NULL;
+    }
+
+    while (getchar() != '\n');
 
     while (true) {
         printf("Please enter your new username >");
@@ -59,13 +60,35 @@ void makeNewAccountUsername(char *new_username) {
         confirm[0] = fgetc(stdin);
         confirm[0] = tolower(confirm[0]);
         while (getchar() != '\n');
-        if (confirm[0] == 'y') {break;} 
-        else{printf("Retry?\n");}
+        if (confirm[0] == 'y') {return new_username;}
+        if (confirm[0] == 'n') {
+            printf("Retry? (Y/N) > ");
+            confirm[0] = fgetc(stdin);
+            confirm[0] = tolower(confirm[0]);
+            if (confirm[0] == 'y') {
+                memset(new_username, '\0', MAX_CHAR);
+                while (getchar() != '\n');
+                continue;
+            }
+            else {
+                free(new_username);
+                return NULL;
+            }
+        } 
+        else {puts("Invalid Input. \n"); continue;}
     }
 }
 
-void makeNewAccountPassword(char *new_password) {
+char *makeNewAccountPassword() {
     char confirm[MAX_CHAR];
+    char *new_password = malloc(MAX_CHAR * sizeof(char));
+
+    if(new_password = NULL) {
+        puts("FATAL: Memory Allocation failed in makeNewAccountPassword() !!");
+        return NULL;
+    }
+
+    while (getchar() != '\n');
 
     while (true) {
         printf("Please enter your new password >");
@@ -78,7 +101,21 @@ void makeNewAccountPassword(char *new_password) {
         confirm[0] = fgetc(stdin);
         confirm[0] = tolower(confirm[0]);
         while (getchar() != '\n');
-        if (confirm[0] == 'y') { break; } 
-        else { printf("Retry?\n"); }
+        if (confirm[0] == 'y') {return new_password;} 
+        if (confirm[0] == 'n') {
+            printf("Retry? (Y/N) >");
+            confirm[0] = fgetc(stdin);
+            confirm[0] = tolower(confirm[0]);
+            if (confirm[0] == 'y') {
+                memset(new_password, '\0', MAX_CHAR);
+                while (getchar() != '\n');
+                continue;
+            } 
+            else {
+                free(new_password);
+                return NULL;
+            }
+        }
+        else {puts("Invalid Input. \n"); continue;}
     }
 }
